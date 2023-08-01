@@ -30,17 +30,17 @@
 #include "EPD_5in65f.h"
 #include "EPD_Test.h"
 
-int EPD_5in65f_test(void)
+int EPD_test(void)
 {
 	printf("EPD_5in65F_test Demo\r\n");
     if(DEV_Module_Init()!=0){
         return -1;
     }
 
-  printf("e-Paper Init and Clear...\r\n");
+	printf("e-Paper Init and Clear...\r\n");
 	EPD_5IN65F_Init();
 	EPD_5IN65F_Clear(EPD_5IN65F_WHITE);
-  DEV_Delay_ms(100);
+	DEV_Delay_ms(100);
 				
 	UBYTE *BlackImage;
     /* you have to edit the startup_stm32fxxx.s file and set a big enough heap size */

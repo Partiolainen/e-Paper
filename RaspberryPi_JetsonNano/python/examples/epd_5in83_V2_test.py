@@ -21,7 +21,7 @@ try:
     epd = epd5in83_V2.EPD()
     logging.info("init and Clear")
     epd.init()
-    epd.Clear()
+    # epd.Clear()
     
     font24 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 24)
     font18 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 18)
@@ -79,9 +79,6 @@ try:
     
     logging.info("Goto Sleep...")
     epd.sleep()
-    time.sleep(3)
-    
-    epd.Dev_exit()
     
 except IOError as e:
     logging.info(e)

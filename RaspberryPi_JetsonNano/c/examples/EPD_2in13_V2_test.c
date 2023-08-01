@@ -29,6 +29,7 @@
 ******************************************************************************/
 #include "EPD_Test.h"
 #include "EPD_2in13_V2.h"
+#include <time.h> 
 
 int EPD_2in13_V2_test(void)
 {
@@ -39,7 +40,13 @@ int EPD_2in13_V2_test(void)
 
     printf("e-Paper Init and Clear...\r\n");
     EPD_2IN13_V2_Init(EPD_2IN13_V2_FULL);
+	
+	struct timespec start={0,0}, finish={0,0}; 
+    clock_gettime(CLOCK_REALTIME,&start);
     EPD_2IN13_V2_Clear();
+	clock_gettime(CLOCK_REALTIME,&finish);
+    printf("%ld S\r\n",finish.tv_sec-start.tv_sec);	
+    
     DEV_Delay_ms(500);
 
     //Create a new image cache
@@ -56,7 +63,7 @@ int EPD_2in13_V2_test(void)
     Paint_SetMirroring(MIRROR_HORIZONTAL); //
     Paint_Clear(WHITE);
 
-#if 0   // show bmp
+#if 1   // show bmp
     printf("show window BMP-----------------\r\n");
     Paint_SelectImage(BlackImage);
     Paint_Clear(WHITE);
@@ -82,7 +89,7 @@ int EPD_2in13_V2_test(void)
     DEV_Delay_ms(2000);
 #endif
 
-#if 0   // Drawing on the image
+#if 1   // Drawing on the image
     printf("Drawing\r\n");
     //1.Select Image
     Paint_SelectImage(BlackImage);
@@ -107,8 +114,8 @@ int EPD_2in13_V2_test(void)
     Paint_DrawString_EN(140, 15, "waveshare", &Font16, BLACK, WHITE);
     Paint_DrawNum(140, 40, 123456789, &Font16, BLACK, WHITE);
 
-    Paint_DrawString_CN(140, 60, "ÄãºÃabc", &Font12CN, BLACK, WHITE);
-    Paint_DrawString_CN(5, 65, "Î¢Ñ©µç×Ó", &Font24CN, WHITE, BLACK);
+    Paint_DrawString_CN(140, 60, "ï¿½ï¿½ï¿½abc", &Font12CN, BLACK, WHITE);
+    Paint_DrawString_CN(5, 65, "Î¢Ñ©ï¿½ï¿½ï¿½ï¿½", &Font24CN, WHITE, BLACK);
 
     EPD_2IN13_V2_Display(BlackImage);
     DEV_Delay_ms(2000);
@@ -147,10 +154,10 @@ int EPD_2in13_V2_test(void)
     Paint_DrawLine(9, 	114,9,	9,		BLACK, DOT_PIXEL_1X1, LINE_STYLE_SOLID);
 
     Paint_DrawString_EN(60, 25, "waveshare", &Font16, BLACK, WHITE);
-    Paint_DrawString_CN(60, 55, "Î¢Ñ©µç×Ó", &Font24CN, WHITE, BLACK);
+    Paint_DrawString_CN(60, 55, "Î¢Ñ©ï¿½ï¿½ï¿½ï¿½", &Font24CN, WHITE, BLACK);
 
     EPD_2IN13_V2_Display(BlackImage);
-    DEV_Delay_ms(20000);
+    DEV_Delay_ms(2000);
 #endif
 
 #if 1   //Partial refresh, example shows time    		

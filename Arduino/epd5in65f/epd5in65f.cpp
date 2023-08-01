@@ -50,10 +50,10 @@ function :  Initialize the e-Paper register
 parameter:
 ******************************************************************************/
 int Epd::Init(void) {
-  if (IfInit() != 0) {
-      return -1;
-  }
-  Reset();
+    if (IfInit() != 0) {
+        return -1;
+    }
+    Reset();
     EPD_5IN65F_BusyHigh();
     SendCommand(0x00);
     SendData(0xEF);
@@ -71,7 +71,7 @@ int Epd::Init(void) {
     SendData(0x1D);
     SendCommand(0x30);
     SendData(0x3C);
-    SendCommand(0x40);
+    SendCommand(0x41);
     SendData(0x00);
     SendCommand(0x50);
     SendData(0x37);
@@ -88,6 +88,8 @@ int Epd::Init(void) {
     DelayMs(100);
     SendCommand(0x50);
     SendData(0x37);
+
+    return 0;
 }
 
 /**
@@ -129,46 +131,6 @@ void Epd::Reset(void) {
 }
 
 /******************************************************************************
-function :	show 7 kind of color block
-parameter:
-******************************************************************************/
-void Epd::EPD_5IN65F_Show7Block(void)
-{
-    unsigned long i,j,k;
-    unsigned char const Color_seven[8] =
-	{EPD_5IN65F_BLACK,EPD_5IN65F_BLUE,EPD_5IN65F_GREEN,EPD_5IN65F_ORANGE,
-	EPD_5IN65F_RED,EPD_5IN65F_YELLOW,EPD_5IN65F_WHITE,EPD_5IN65F_WHITE};
-    SendCommand(0x61);//Set Resolution setting
-    SendData(0x02);
-    SendData(0x58);
-    SendData(0x01);
-    SendData(0xC0);
-    SendCommand(0x10);
-
-    for(i=0; i<224; i++) {
-        for(k = 0 ; k < 4; k ++) {
-            for(j = 0 ; j < 75; j ++) {
-                SendData((Color_seven[k]<<4) |Color_seven[k]);
-            }
-        }
-    }
-    for(i=0; i<224; i++) {
-        for(k = 4 ; k < 8; k ++) {
-            for(j = 0 ; j < 75; j ++) {
-                SendData((Color_seven[k]<<4) |Color_seven[k]);
-            }
-        }
-    }
-    SendCommand(0x04);//0x04
-    EPD_5IN65F_BusyHigh();
-    SendCommand(0x12);//0x12
-    EPD_5IN65F_BusyHigh();
-    SendCommand(0x02);  //0x02
-    EPD_5IN65F_BusyLow();
-	DelayMs(200);
-}
-
-/******************************************************************************
 function :  Sends the image buffer in RAM to e-Paper and displays
 parameter:
 ******************************************************************************/
@@ -181,8 +143,9 @@ void Epd::EPD_5IN65F_Display(const UBYTE *image) {
     SendData(0xC0);
     SendCommand(0x10);
     for(i=0; i<height; i++) {
-        for(j=0; j<width/2; j++)
+        for(j=0; j<width/2; j++) {
             SendData(image[j+((width/2)*i)]);
+		}
     }
     SendCommand(0x04);//0x04
     EPD_5IN65F_BusyHigh();
@@ -208,13 +171,14 @@ void Epd::EPD_5IN65F_Display_part(const UBYTE *image, UWORD xstart, UWORD ystart
     SendData(0xC0);
     SendCommand(0x10);
     for(i=0; i<height; i++) {
-        for(j=0; j< width/2; j++)
+        for(j=0; j< width/2; j++) {
             if(i<image_heigh+ystart && i>=ystart && j<(image_width+xstart)/2 && j>=xstart/2) {
               SendData(pgm_read_byte(&image[(j-xstart/2) + (image_width/2*(i-ystart))]));
             }
-						else {
-							SendData(0x11);
-						}
+			else {
+				SendData(0x11);
+			}
+		}
     }
     SendCommand(0x04);//0x04
     EPD_5IN65F_BusyHigh();
@@ -237,9 +201,10 @@ void Epd::Clear(UBYTE color) {
     SendData(0xC0);
     SendCommand(0x10);
     for(int i=0; i<width/2; i++) {
-        for(int j=0; j<height; j++)
+        for(int j=0; j<height; j++) {
             SendData((color<<4)|color);
-    }
+		}
+	}
     SendCommand(0x04);//0x04
     EPD_5IN65F_BusyHigh();
     SendCommand(0x12);//0x12
@@ -263,7 +228,5 @@ void Epd::Sleep(void) {
     DelayMs(100);
 	DigitalWrite(RST_PIN, 0); // Reset
 }
-
-
 
 /* END OF FILE */

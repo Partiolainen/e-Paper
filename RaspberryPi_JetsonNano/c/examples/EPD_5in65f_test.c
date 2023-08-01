@@ -1,4 +1,4 @@
-/*    DEV_Delay_ms(2000);//important, at least 2s/*****************************************************************************
+/*****************************************************************************
 * | File      	:   EPD_5in65f_test.c
 * | Author      :   Waveshare team
 * | Function    :   5.65inch F e-paper test demo
@@ -47,9 +47,6 @@ int EPD_5in65f_test(void)
     printf("%ld S\r\n",finish.tv_sec-start.tv_sec);
     DEV_Delay_ms(100);
 	
-	// EPD_5IN65F_Show7Block();
-	// DEV_Delay_ms(10000);
-	
     UBYTE *BlackImage;
     /* you have to edit the startup_stm32fxxx.s file and set a big enough heap size */
     UDOUBLE Imagesize = ((EPD_5IN65F_WIDTH % 2 == 0)? (EPD_5IN65F_WIDTH / 2 ): (EPD_5IN65F_WIDTH / 2 + 1)) * EPD_5IN65F_HEIGHT;
@@ -62,10 +59,17 @@ int EPD_5in65f_test(void)
 	
 #if 1
     printf("show image for array\r\n");
+
+	EPD_5IN65F_Display(flagimage);
+
+    DEV_Delay_ms(4000);
+#endif
+
+#if 1
+    printf("show image for array\r\n");
     Paint_Clear(EPD_5IN65F_WHITE);
-    GUI_ReadBmp_RGB_7Color("./pic/5in65f3.bmp", 0, 0);
+    GUI_ReadBmp_RGB_7Color("./pic/5in65f.bmp", 0, 0);
 	EPD_5IN65F_Display(BlackImage);
-    // EPD_5IN65F_Display_part(BlackImage, 0, 0, 600, 260);
     DEV_Delay_ms(4000);
 #endif
 
@@ -87,19 +91,19 @@ int EPD_5in65f_test(void)
     Paint_DrawString_EN(10, 20, "hello world", &Font12, EPD_5IN65F_WHITE, EPD_5IN65F_BLACK);
     Paint_DrawNum(10, 33, 123456789, &Font12, EPD_5IN65F_BLACK, EPD_5IN65F_WHITE);
     Paint_DrawNum(10, 50, 987654321, &Font16, EPD_5IN65F_WHITE, EPD_5IN65F_BLACK);
-    Paint_DrawString_CN(300, 0, "ÄãºÃabc", &Font12CN, EPD_5IN65F_BLACK, EPD_5IN65F_WHITE);
-    Paint_DrawString_CN(300, 20, "ÄãºÃabc", &Font12CN, EPD_5IN65F_GREEN, EPD_5IN65F_WHITE);
-    Paint_DrawString_CN(300, 40, "ÄãºÃabc", &Font12CN, EPD_5IN65F_BLUE, EPD_5IN65F_WHITE);
-    Paint_DrawString_CN(300, 60, "ÄãºÃabc", &Font12CN, EPD_5IN65F_RED, EPD_5IN65F_WHITE);
-    Paint_DrawString_CN(300, 80, "ÄãºÃabc", &Font12CN, EPD_5IN65F_YELLOW, EPD_5IN65F_WHITE);
-    Paint_DrawString_CN(300, 100, "ÄãºÃabc", &Font12CN, EPD_5IN65F_ORANGE, EPD_5IN65F_WHITE);
-    Paint_DrawString_CN(150, 0, "Î¢Ñ©µç×Ó", &Font24CN, EPD_5IN65F_WHITE, EPD_5IN65F_BLACK);
-    Paint_DrawString_CN(150, 40, "Î¢Ñ©µç×Ó", &Font24CN, EPD_5IN65F_GREEN, EPD_5IN65F_BLACK);
-    Paint_DrawString_CN(150, 80, "Î¢Ñ©µç×Ó", &Font24CN, EPD_5IN65F_BLUE, EPD_5IN65F_BLACK);
-    Paint_DrawString_CN(150, 120, "Î¢Ñ©µç×Ó", &Font24CN, EPD_5IN65F_RED, EPD_5IN65F_BLACK);
-    Paint_DrawString_CN(150, 160, "Î¢Ñ©µç×Ó", &Font24CN, EPD_5IN65F_YELLOW, EPD_5IN65F_BLACK);
-    Paint_DrawString_CN(150, 200, "Î¢Ñ©µç×Ó", &Font24CN, EPD_5IN65F_ORANGE, EPD_5IN65F_BLACK);
-    Paint_DrawString_CN(150, 240, "Î¢Ñ©µç×Ó", &Font24CN, EPD_5IN65F_BLACK, EPD_5IN65F_YELLOW);
+    Paint_DrawString_CN(300, 0, "ï¿½ï¿½ï¿½abc", &Font12CN, EPD_5IN65F_BLACK, EPD_5IN65F_WHITE);
+    Paint_DrawString_CN(300, 20, "ï¿½ï¿½ï¿½abc", &Font12CN, EPD_5IN65F_GREEN, EPD_5IN65F_WHITE);
+    Paint_DrawString_CN(300, 40, "ï¿½ï¿½ï¿½abc", &Font12CN, EPD_5IN65F_BLUE, EPD_5IN65F_WHITE);
+    Paint_DrawString_CN(300, 60, "ï¿½ï¿½ï¿½abc", &Font12CN, EPD_5IN65F_RED, EPD_5IN65F_WHITE);
+    Paint_DrawString_CN(300, 80, "ï¿½ï¿½ï¿½abc", &Font12CN, EPD_5IN65F_YELLOW, EPD_5IN65F_WHITE);
+    Paint_DrawString_CN(300, 100, "ï¿½ï¿½ï¿½abc", &Font12CN, EPD_5IN65F_ORANGE, EPD_5IN65F_WHITE);
+    Paint_DrawString_CN(150, 0, "Î¢Ñ©ï¿½ï¿½ï¿½ï¿½", &Font24CN, EPD_5IN65F_WHITE, EPD_5IN65F_BLACK);
+    Paint_DrawString_CN(150, 40, "Î¢Ñ©ï¿½ï¿½ï¿½ï¿½", &Font24CN, EPD_5IN65F_GREEN, EPD_5IN65F_BLACK);
+    Paint_DrawString_CN(150, 80, "Î¢Ñ©ï¿½ï¿½ï¿½ï¿½", &Font24CN, EPD_5IN65F_BLUE, EPD_5IN65F_BLACK);
+    Paint_DrawString_CN(150, 120, "Î¢Ñ©ï¿½ï¿½ï¿½ï¿½", &Font24CN, EPD_5IN65F_RED, EPD_5IN65F_BLACK);
+    Paint_DrawString_CN(150, 160, "Î¢Ñ©ï¿½ï¿½ï¿½ï¿½", &Font24CN, EPD_5IN65F_YELLOW, EPD_5IN65F_BLACK);
+    Paint_DrawString_CN(150, 200, "Î¢Ñ©ï¿½ï¿½ï¿½ï¿½", &Font24CN, EPD_5IN65F_ORANGE, EPD_5IN65F_BLACK);
+    Paint_DrawString_CN(150, 240, "Î¢Ñ©ï¿½ï¿½ï¿½ï¿½", &Font24CN, EPD_5IN65F_BLACK, EPD_5IN65F_YELLOW);
 
     EPD_5IN65F_Display(BlackImage);
     DEV_Delay_ms(4000); 

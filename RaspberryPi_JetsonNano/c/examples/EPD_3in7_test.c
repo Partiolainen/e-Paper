@@ -51,10 +51,13 @@ int EPD_3in7_test(void)
 
     //Create a new image cache
     UBYTE *BlackImage;
-    /* you have to edit the startup_stm32fxxx.s file and set a big enough heap size */
-    UWORD Imagesize = ((EPD_3IN7_WIDTH % 4 == 0)? (EPD_3IN7_WIDTH / 4 ): (EPD_3IN7_WIDTH / 4 + 1)) * EPD_3IN7_HEIGHT;
+
+    // Allocate enough for for 4 bits for each pixel (16 gray)
+    // If you don't use the dithering, this will only need to be 2 bits per pixel
+    // you may have to edit the startup_stm32fxxx.s file and set a big enough heap size
+    int Imagesize = (EPD_3IN7_WIDTH + 1) / 2 * EPD_3IN7_HEIGHT;
     if((BlackImage = (UBYTE *)malloc(Imagesize)) == NULL) {
-        printf("Failed to apply for black memory...\r\n");
+        printf("Failed to apply for memory...\r\n");
         return -1;
     }
 
@@ -113,6 +116,7 @@ int EPD_3in7_test(void)
 #endif
 
 #if 1 // partial update, just 1 Gray mode
+    Paint_NewImage(BlackImage, 50, 120, 270, WHITE);
     EPD_3IN7_1Gray_Init();       //init 1 Gray mode
     EPD_3IN7_1Gray_Clear();
     Paint_SelectImage(BlackImage);
@@ -123,7 +127,7 @@ int EPD_3in7_test(void)
     sPaint_time.Hour = 12;
     sPaint_time.Min = 34;
     sPaint_time.Sec = 56;
-    UBYTE num = 10;
+    UBYTE num = 15;
     for (;;) {
         sPaint_time.Sec = sPaint_time.Sec + 1;
         if (sPaint_time.Sec == 60) {
@@ -139,8 +143,9 @@ int EPD_3in7_test(void)
                 }
             }
         }
-        Paint_ClearWindows(300, 0, 479, 80, WHITE);
-        Paint_DrawTime(300, 20, &sPaint_time, &Font20, WHITE, BLACK);
+	    Paint_Clear(WHITE);
+		Paint_DrawRectangle(1, 1, 120, 50, BLACK, DOT_PIXEL_1X1, DRAW_FILL_EMPTY);
+        Paint_DrawTime(10, 15, &sPaint_time, &Font20, WHITE, BLACK);
 
         num = num - 1;
         if(num == 0) {
@@ -148,10 +153,30 @@ int EPD_3in7_test(void)
         }
 
         printf("Part refresh...\r\n");
-        EPD_3IN7_1Gray_Display(BlackImage);
-        // EPD_3IN7_1Gray_Display_Part(BlackImage, 0, 0, 279, 180);
+        EPD_3IN7_1Gray_Display_Part(BlackImage, 40, 30, 90, 150); // Xstart must be a multiple of 8
         DEV_Delay_ms(500);
     }
+
+#if 1   // show dithered bmp
+    EPD_3IN7_4Gray_Init(); // Clear
+    EPD_3IN7_4Gray_Clear();
+
+    EPD_3IN7_1Gray_Init();       //init 1 Gray mode
+    EPD_3IN7_1Gray_Clear();
+
+    Paint_NewImage(BlackImage, 280, 480, 0, WHITE);
+    Paint_SetScale(16);
+    Paint_Clear(WHITE);
+
+    printf("show dithered BMP with Sierra-Lite\r\n");
+    GUI_ReadBmp_16Gray("./pic/3in7_4bit1.bmp", 0, 0);
+    EPD_3IN7_1Gray_Display_Dithered(BlackImage, 0);
+    DEV_Delay_ms(4000);
+
+    printf("show dithered BMP with Floyd-Steinberg\r\n");
+    EPD_3IN7_1Gray_Display_Dithered(BlackImage, 1);
+    DEV_Delay_ms(4000);
+#endif
 
 #endif
     EPD_3IN7_4Gray_Init();

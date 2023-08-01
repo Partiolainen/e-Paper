@@ -30,7 +30,7 @@
 #include "EPD_Test.h"
 #include "EPD_2in9_V2.h"
 
-int EPD_2in9_V2_test(void)
+int EPD_test(void)
 {
     printf("EPD_2IN9_V2_test Demo\r\n");
     if(DEV_Module_Init()!=0){
@@ -94,8 +94,8 @@ int EPD_2in9_V2_test(void)
     Paint_DrawNum(10, 33, 123456789, &Font12, BLACK, WHITE);
     Paint_DrawNum(10, 50, 987654321, &Font16, WHITE, BLACK);
 
-    Paint_DrawString_CN(130, 0,"‰Ω†Â•Ωabc", &Font12CN, BLACK, WHITE);
-    Paint_DrawString_CN(130, 20, "ÂæÆÈõ™ÁîµÂ≠ê", &Font24CN, WHITE, BLACK);
+    Paint_DrawString_CN(130, 0, "ƒ„∫√abc", &Font12CN, BLACK, WHITE);
+    Paint_DrawString_CN(130, 20, "Œ¢—©µÁ◊”", &Font24CN, WHITE, BLACK);
 
     EPD_2IN9_V2_Display_Base(BlackImage);
     DEV_Delay_ms(3000);
