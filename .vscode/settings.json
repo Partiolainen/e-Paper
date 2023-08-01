@@ -8,6 +8,7 @@
         "gui_bmpfile.h": "c",
         "imagedata.h": "c",
         "debug.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "epd_4in37g.h": "c"
     }
 }
